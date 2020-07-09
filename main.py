@@ -1,16 +1,16 @@
 import config
 
 
-def load_data_from_file(file):
-    with open(file) as fin:
-        data = fin.read()
-        data = data.strip()
-    assert len(data) == 81
+def load_data_from_config():
+    data = config.data
+    validate_data(data)
     return data
 
 
-def load_data_from_config():
-    return config.data
+def validate_data(data):
+    assert len(data) == 81, f"expected 81 chars, got {len(data)}"
+    for c in data:
+        assert c.isnumeric(), f"Non-numeric character found: {c}"
 
 
 def create_grid(data):
@@ -93,17 +93,21 @@ def get_possibles(ref):
     return ALL_NUMBERS.difference(impossibles)
 
 
-ALL_NUMBERS = {"1", "2", "3", "4", "5", "6", "7", "8", "9"}
-
-data = load_data_from_config()
-grid = create_grid(data)
-
-print(len(get_solved_cells()))
-
-while len(get_solved_cells()) < 81:
+def clarify_all_cells():
     for k, v in grid.items():
         if not len(v) == 1:  # cell is not solved
             possibles = get_possibles(k)
             grid[k] = possibles
 
-    print(f"solved: {len(get_solved_cells())} cells")
+
+ALL_NUMBERS = {"1", "2", "3", "4", "5", "6", "7", "8", "9"}
+
+data = load_data_from_config()
+grid = create_grid(data)
+
+if __name__ == "__main__":
+
+    while len(get_solved_cells()) < 81:
+        clarify_all_cells()
+        print(f"solved: {len(get_solved_cells())} cells")
+
