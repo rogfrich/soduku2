@@ -133,3 +133,12 @@ def test_validate_data_valid():
     """
     d = config.valid_data
     main.validate_data(d)
+
+def test_convert_qqwing_data_to_standard_format():
+    """
+    Test that convert_qqwing_to_standard_format() returns a correctly formatted string.
+    """
+    d = config.qqwing_format_data
+    converted_data = main.convert_qqwing_to_standard_format(d)
+    assert len(converted_data) == 81
+    assert '.' not in converted_data

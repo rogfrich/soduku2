@@ -18,7 +18,12 @@ bad_data_invalid_character = (
     "2X0910568000254100100000300300009600958062004074038010081040026000700800006891003"
 )
 
-data = valid_data  # set data to one of the options above depending on what you want to test
+# QQwing format - simple
+qqwing_format_data = (
+    "....1...5....93.48.2.4.5........1.6..3...4.2....9....4...1.........56.9356.2..41."
+)
+
+data = valid_data # set data to one of the options above depending on what you want to test
 
 # square_map is used to work out which square a given cell is in, and what the other cells in the square are
 square_map = {

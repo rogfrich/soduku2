@@ -3,9 +3,21 @@ import config
 
 def load_data_from_config():
     data = config.data
+    if '.' in data:
+        data = convert_qqwing_to_standard_format(data)
+
     validate_data(data)
     return data
 
+def convert_qqwing_to_standard_format(data):
+    converted_data = ''
+    for c in data:
+        if c == '.':
+            converted_data += '0'
+        else:
+            converted_data += c
+
+    return converted_data
 
 def validate_data(data):
     assert len(data) == 81, f"expected 81 chars, got {len(data)}"
@@ -19,7 +31,7 @@ def create_grid(data):
     for row in range(9):
         for col in range(9):
             c = data[char_count]
-            if c == "0":
+            if c == "0" or c == ".":
                 grid[f"{row}{col}"] = set()
             else:
                 grid[f"{row}{col}"] = set(c)
@@ -110,4 +122,3 @@ if __name__ == "__main__":
     while len(get_solved_cells()) < 81:
         clarify_all_cells()
         print(f"solved: {len(get_solved_cells())} cells")
-
