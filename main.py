@@ -2,12 +2,13 @@ import config
 
 
 def load_data_from_config():
-    data = config.data
+    data = config.test_data['qqwing_format_data']
     if '.' in data:
         data = convert_qqwing_to_standard_format(data)
 
     validate_data(data)
     return data
+
 
 def convert_qqwing_to_standard_format(data):
     converted_data = ''
@@ -18,6 +19,7 @@ def convert_qqwing_to_standard_format(data):
             converted_data += c
 
     return converted_data
+
 
 def validate_data(data):
     assert len(data) == 81, f"expected 81 chars, got {len(data)}"
@@ -41,8 +43,11 @@ def create_grid(data):
     return grid
 
 
-def get_solved_cells():
-    global grid
+def get_solved_cells(test_grid=None):
+    if not test_grid:
+        global grid
+    else:
+        grid = test_grid
     solved_cells = []
     for k, v in grid.items():
         if len(v) == 1:
@@ -87,8 +92,11 @@ def get_cell_refs_in_house(ref, mode):
     return house
 
 
-def get_impossibles(ref):
-    global grid
+def get_impossibles(ref, test_grid=None):
+    if not test_grid:  # if this func is called from the test harness, it will be supplied with an instance of the grid
+        global grid
+    else:
+        grid = test_grid
     impossibles = set()
     for mode in "rcs":
         interacting_cells = get_cell_refs_in_house(ref, mode)
@@ -99,9 +107,14 @@ def get_impossibles(ref):
     return impossibles
 
 
-def get_possibles(ref):
+def get_possibles(ref, test_grid=None):
     global ALL_NUMBERS
-    impossibles = get_impossibles(ref)
+
+    if not test_grid:  # if this func is called from the test harness, it will be supplied with an instance of the grid
+        global grid
+    else:
+        grid = test_grid
+    impossibles = get_impossibles(ref, grid)
     return ALL_NUMBERS.difference(impossibles)
 
 
