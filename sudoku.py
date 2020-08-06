@@ -133,7 +133,6 @@ class Sudoku:
     def solve(self):
         while not self.solved:
             self.clarify_all_cells()
-            print(len(self.solved_cells))
 
 
 if __name__ == '__main__':
