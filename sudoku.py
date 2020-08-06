@@ -10,6 +10,9 @@ class Sudoku:
         self.ALL_NUMBERS = {"1", "2", "3", "4", "5", "6", "7", "8", "9"}
         self.solved = False
 
+    def __repr__(self):
+        return f'sudoku object with {81 - len(self.solved_cells)} cells left to solve'
+
     def clean_data(self):
         # Length check
         assert (
@@ -135,5 +138,5 @@ class Sudoku:
 
 if __name__ == '__main__':
     s = Sudoku(config.test_data['qqwing_format_data'])
-
+    print(s)
     s.solve()
