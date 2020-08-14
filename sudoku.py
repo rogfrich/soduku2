@@ -7,7 +7,7 @@ class Sudoku:
         self.data = self.clean_data()
         self.grid = self.create_grid()
         self.update_solved_cells()
-        self.ALL_NUMBERS = {"1", "2", "3", "4", "5", "6", "7", "8", "9"}
+        self.ALL_NUMBERS = config.ALL_NUMBERS
         self.solved = False
 
     def __repr__(self):
@@ -16,7 +16,7 @@ class Sudoku:
     def clean_data(self):
         # Length check
         assert (
-                len(self.init_data) == 81
+                len(self.init_data) == config.ROW_LENGTH ** 2
         ), f"expected 81 chars, got {len(self.init_data)}"
 
         # Character check
@@ -25,6 +25,7 @@ class Sudoku:
                 if not c == ".":
                     raise ValueError(f"invalid character in sudoku data: {c}")
 
+        # Sudoku sourced from QQwing.com uses "." for an empty cell. This app uses "0" for empty cells.
         if "." in self.init_data:
             converted_data = ""
             for c in self.init_data:
@@ -40,8 +41,8 @@ class Sudoku:
     def create_grid(self):
         grid = {}
         char_count = 0
-        for row in range(9):
-            for col in range(9):
+        for row in range(config.ROW_LENGTH):
+            for col in range(config.ROW_LENGTH):
                 c = self.data[char_count]
                 if c == "0" or c == ".":
                     grid[f"{row}{col}"] = set()
@@ -49,12 +50,13 @@ class Sudoku:
                     grid[f"{row}{col}"] = set(c)
                 char_count += 1
 
-        assert len(grid.keys()) == 81
+        assert len(grid.keys()) == config.ROW_LENGTH ** 2
         return grid
 
     def update_solved_cells(self):
         solved = []
         for k, v in self.grid.items():
+            # if there's only one possible value, them the cell is solved.
             if len(v) == 1:
                 solved.append(k)
 
@@ -127,7 +129,7 @@ class Sudoku:
 
         self.update_solved_cells()
         if hasattr(self, "solved_cells"):
-            if len(self.solved_cells) == 81:
+            if len(self.solved_cells) == config.ROW_LENGTH ** 2:
                 self.solved = True
 
     def solve(self):
