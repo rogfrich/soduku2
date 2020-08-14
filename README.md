@@ -23,6 +23,8 @@ I use the following terms in this code:
 - `clarify`: work out what the possible values for a given square are based on the other squares in its houses.
 
 ## App lifecycle
-This app is mainly a test-bed for concepts and techniques I learn as I study Python. As such, it tends to get completely gutted and rewritten from time to time. Breaking changes are frequent, severe and completely unapologetic.
+This app is mainly a test-bed for concepts and techniques I learn as I study Python. As such, it tends to get completely gutted and rewritten from time to time. Breaking changes are frequent, severe... and completely unapologetic. :-)
 
-For this reason, I deliberately haven't licensed the app - it's not really meant for any sort of use other than my own learning. 
+For this reason, I deliberately haven't licensed the app - it's not really meant for any sort of use other than my own learning, and I don't really want to be on the hook for supporting it in the wild. In the unlikely circumstance that someone wants to use this code, feel free to raise an issue and we can sort something out (which might just be me biting the bullet and giving it a proper license).
+
+Cheers!
