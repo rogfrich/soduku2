@@ -1,6 +1,9 @@
 # set the maximum range of numbers that a cell could be. For standard sudoku, this will be 9.
 ALL_NUMBERS = {"1", "2", "3", "4", "5", "6", "7", "8", "9"}
 
+# set the maximum number of retries before the sudoku is considered unsolvable.
+MAX_NUMBER_OF_RETRIES = 3
+
 # set the length of a row. For now, this app only supports square puzzles, i.e. with the same number of rows and cols.
 ROW_LENGTH = 9
 

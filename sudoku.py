@@ -1,4 +1,7 @@
+import copy
+
 import config
+from exceptions import UnableToSolveError
 
 
 class Sudoku:
@@ -52,6 +55,12 @@ class Sudoku:
 
         assert len(grid.keys()) == config.ROW_LENGTH ** 2
         return grid
+
+    def create_snapshot(self):
+        """
+        Returns a snapshot of the grid, so that it can be used to see if the state of the grid has changed.
+        """
+        return copy.deepcopy(self.grid)
 
     def update_solved_cells(self):
         solved = []
@@ -134,10 +143,17 @@ class Sudoku:
 
     def solve(self):
         while not self.solved:
+            start = self.create_snapshot()
             self.clarify_all_cells()
 
+            # If the grid hasn't changed after running self.clarify_all_cells, then raise an exception
+            if self.create_snapshot() == start:
+                raise UnableToSolveError
 
 if __name__ == '__main__':
-    s = Sudoku(config.test_data['qqwing_format_data'])
+    s = Sudoku(config.test_data['valid_data'])
+    #s = Sudoku(config.test_data['bad_data_invalid_sudoku'])
+
     print(s)
     s.solve()
+    print(f'Solved: {s.solved}')

@@ -144,3 +144,29 @@ def test_clean_data_qqwing_format():
     """
     s = Sudoku(test_data['valid_data'])
     assert len(s.data) == 81 and "." not in s.data
+
+def test_create_snapshot():
+    """
+    Test that create_snapshot() correctly creates a copy of the grid.
+    """
+    s = Sudoku(test_data['valid_data'])
+    start = s.create_snapshot()
+    assert start == s.grid
+
+def test_create_snapshot_is_different_to_grid_after_update():
+    """
+    Test that once the grid is updated, create_snapshot() does not equal self.grid
+    """
+    s = Sudoku(test_data['valid_data'])
+    start = s.create_snapshot()
+    s.clarify_all_cells()
+    assert start != s.grid
+
+def test_solve_raises_exception_if_grid_does_not_change():
+    """
+    Test that once the grid is updated, create_snapshot() does not equal self.grid
+    """
+    import exceptions
+    s = Sudoku(test_data['bad_data_invalid_sudoku'])
+    with pytest.raises(exceptions.UnableToSolveError):
+        s.solve()
