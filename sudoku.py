@@ -14,12 +14,12 @@ class Sudoku:
         self.solved = False
 
     def __repr__(self):
-        return f'sudoku object with {81 - len(self.solved_cells)} cells left to solve'
+        return f"sudoku object with {81 - len(self.solved_cells)} cells left to solve"
 
     def clean_data(self):
         # Length check
         assert (
-                len(self.init_data) == config.ROW_LENGTH ** 2
+            len(self.init_data) == config.ROW_LENGTH ** 2
         ), f"expected 81 chars, got {len(self.init_data)}"
 
         # Character check
@@ -150,10 +150,11 @@ class Sudoku:
             if self.create_snapshot() == start:
                 raise UnableToSolveError
 
-if __name__ == '__main__':
-    s = Sudoku(config.test_data['valid_data'])
-    #s = Sudoku(config.test_data['bad_data_invalid_sudoku'])
+
+if __name__ == "__main__":
+    s = Sudoku(config.test_data["valid_data"])
+    # s = Sudoku(config.test_data['bad_data_invalid_sudoku'])
 
     print(s)
     s.solve()
-    print(f'Solved: {s.solved}')
+    print(f"Solved: {s.solved}")
