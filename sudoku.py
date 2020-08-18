@@ -105,8 +105,32 @@ class Sudoku:
                         if not cell == ref:
                             house.append(cell)
 
+
         assert len(house) == 8
         return house
+
+
+    def get_grid_subset(self, index, mode):
+        """
+        Return a subset of the grid.
+        """
+        assert mode in "rcs"
+
+        if mode == 'r':
+            subset = {
+                k: v for (k, v) in self.grid.items() if k[0] == index
+            }
+        elif mode == 'c':
+            subset = {
+                k: v for (k, v) in self.grid.items() if k[1] == index
+            }
+        else:
+            subset = {}
+            cells_in_square = config.square_map[index]
+            for cell in cells_in_square:
+                subset[cell] = self.grid[cell]
+
+        return subset
 
     def get_impossibles(self, ref):
         impossibles = set()
@@ -153,8 +177,4 @@ class Sudoku:
 
 if __name__ == "__main__":
     s = Sudoku(config.test_data["valid_data"])
-    # s = Sudoku(config.test_data['bad_data_invalid_sudoku'])
-
-    print(s)
-    s.solve()
-    print(f"Solved: {s.solved}")
+    print(s.get_grid_subset('0', mode='s'))
