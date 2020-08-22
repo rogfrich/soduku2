@@ -105,10 +105,8 @@ class Sudoku:
                         if not cell == ref:
                             house.append(cell)
 
-
         assert len(house) == 8
         return house
-
 
     def get_grid_subset(self, index, mode):
         """
@@ -164,6 +162,34 @@ class Sudoku:
         if hasattr(self, "solved_cells"):
             if len(self.solved_cells) == config.ROW_LENGTH ** 2:
                 self.solved = True
+
+    def invert_grid(self, subset):
+        """
+        Return a an inverted version of the grid subset provided. This means that the returned key will be a combination
+        of possible numbers, and the value will be a list of cells which hold those values.
+        """
+        inverted_subset = dict()
+        for k, v in subset.items():
+            inverted_subset.setdefault(tuple(v), list()).append(k)
+
+        return inverted_subset
+
+    def find_naked_multiples(self, index, multiple, mode):
+        """
+        :param index: The row, column or square ID to identify which house we are interested in.
+        :param multiple: how many matches - are we looking for naked pairs, triples, etc
+        :param mode: [r]ow, [col] or [s]quare.
+        :return: matches: a list of 2-item tuples where item[0] is the pair / triple etc and item[1] is a list of cells
+        which hold that pair as possibilities, meaning we should remove those possibilities from all the other cells in
+        the house.
+        """
+        subset = self.get_grid_subset(index, mode=mode)
+        inverted_subset = self.invert_grid(subset)
+        matches = []
+        for k, v in inverted_subset.items():
+            if len(v) == multiple:
+                matches.append((k, v))
+        return matches
 
     def solve(self):
         while not self.solved:

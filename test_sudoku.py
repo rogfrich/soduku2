@@ -198,3 +198,9 @@ def test_get_grid_subset_col():
 def test_get_grid_subset_square():
     s = Sudoku(test_data["valid_data"])
     assert s.get_grid_subset('0', mode='s') == {'00': {'2'}, '01': set(), '02': set(), '10': set(), '11': set(), '12': set(), '20': {'1'}, '21': set(), '22': set()}
+
+def test_find_naked_multiples():
+    s = Sudoku(test_data["valid_data"])
+    s.clarify_all_cells()
+    result =  s.find_naked_multiples("0", 2, mode="r")
+    assert result == [(('7', '3'), ['02', '05'])] or result == [(('3', '7'), ['02', '05'])]
