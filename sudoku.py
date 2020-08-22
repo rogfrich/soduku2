@@ -1,7 +1,7 @@
 import copy
 
 import config
-from exceptions import UnableToSolveError
+from exceptions import UnableToSolveError, NumberNotInPossibleValuesError
 
 
 class Sudoku:
@@ -199,6 +199,21 @@ class Sudoku:
             # If the grid hasn't changed after running self.clarify_all_cells, then raise an exception
             if self.create_snapshot() == start:
                 raise UnableToSolveError
+
+
+    def remove_possibles_from_grid(self, cell, possibles_to_remove):
+        """
+        Remove possible values from a given cell's list of possibles.
+        :param cell: str
+        :param possibles_to_remove: list
+        :return: None
+        """
+        for possible in possibles_to_remove:
+            try:
+                self.grid[cell].remove(possible)
+            except KeyError:
+                raise NumberNotInPossibleValuesError
+
 
 
 if __name__ == "__main__":
