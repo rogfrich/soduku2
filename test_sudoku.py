@@ -1,4 +1,5 @@
 import pytest
+import exceptions
 from sudoku import Sudoku
 from config import test_data, ROW_LENGTH
 
@@ -179,28 +180,75 @@ def test_solve_raises_exception_if_grid_does_not_change():
     """
     Test that once the grid is updated, create_snapshot() does not equal self.grid
     """
-    import exceptions
 
     s = Sudoku(test_data["bad_data_invalid_sudoku"])
     with pytest.raises(exceptions.UnableToSolveError):
         s.solve()
 
+
 def test_get_grid_subset_row():
     s = Sudoku(test_data["valid_data"])
-    assert s.get_grid_subset('0', mode='r') == {'00': {'2'}, '01': set(), '02': set(), '03': {'9'}, '04': {'1'}, '05': set(), '06': {'5'}, '07': {'6'}, '08': {'8'}}
+    assert s.get_grid_subset("0", mode="r") == {
+        "00": {"2"},
+        "01": set(),
+        "02": set(),
+        "03": {"9"},
+        "04": {"1"},
+        "05": set(),
+        "06": {"5"},
+        "07": {"6"},
+        "08": {"8"},
+    }
 
 
 def test_get_grid_subset_col():
     s = Sudoku(test_data["valid_data"])
-    assert s.get_grid_subset('0', mode='c') == {'00': {'2'}, '10': set(), '20': {'1'}, '30': {'3'}, '40': {'9'}, '50': set(), '60': set(), '70': set(), '80': set()}
+    assert s.get_grid_subset("0", mode="c") == {
+        "00": {"2"},
+        "10": set(),
+        "20": {"1"},
+        "30": {"3"},
+        "40": {"9"},
+        "50": set(),
+        "60": set(),
+        "70": set(),
+        "80": set(),
+    }
 
 
 def test_get_grid_subset_square():
     s = Sudoku(test_data["valid_data"])
-    assert s.get_grid_subset('0', mode='s') == {'00': {'2'}, '01': set(), '02': set(), '10': set(), '11': set(), '12': set(), '20': {'1'}, '21': set(), '22': set()}
+    assert s.get_grid_subset("0", mode="s") == {
+        "00": {"2"},
+        "01": set(),
+        "02": set(),
+        "10": set(),
+        "11": set(),
+        "12": set(),
+        "20": {"1"},
+        "21": set(),
+        "22": set(),
+    }
+
 
 def test_find_naked_multiples():
     s = Sudoku(test_data["valid_data"])
     s.clarify_all_cells()
-    result =  s.find_naked_multiples("0", 2, mode="r")
-    assert result == [(('7', '3'), ['02', '05'])] or result == [(('3', '7'), ['02', '05'])]
+    result = s.find_naked_multiples("0", 2, mode="r")
+    assert result == [(("7", "3"), ["02", "05"])] or result == [
+        (("3", "7"), ["02", "05"])
+    ]
+
+
+def test_remove_possibles_from_grid():
+    s = Sudoku(test_data["valid_data"])
+    s.clarify_all_cells()
+    s.remove_possibles_from_grid("01", ["4"])
+    assert s.grid["01"] == {"3"}
+
+
+def test_remove_possibles_from_grid_error():
+    s = Sudoku(test_data["valid_data"])
+    s.clarify_all_cells()
+    with pytest.raises(exceptions.NumberNotInPossibleValuesError):
+        s.remove_possibles_from_grid("01", ["9"])

@@ -114,14 +114,10 @@ class Sudoku:
         """
         assert mode in "rcs"
 
-        if mode == 'r':
-            subset = {
-                k: v for (k, v) in self.grid.items() if k[0] == index
-            }
-        elif mode == 'c':
-            subset = {
-                k: v for (k, v) in self.grid.items() if k[1] == index
-            }
+        if mode == "r":
+            subset = {k: v for (k, v) in self.grid.items() if k[0] == index}
+        elif mode == "c":
+            subset = {k: v for (k, v) in self.grid.items() if k[1] == index}
         else:
             subset = {}
             cells_in_square = config.square_map[index]
@@ -200,7 +196,6 @@ class Sudoku:
             if self.create_snapshot() == start:
                 raise UnableToSolveError
 
-
     def remove_possibles_from_grid(self, cell, possibles_to_remove):
         """
         Remove possible values from a given cell's list of possibles.
@@ -215,7 +210,6 @@ class Sudoku:
                 raise NumberNotInPossibleValuesError
 
 
-
 if __name__ == "__main__":
     s = Sudoku(config.test_data["valid_data"])
-    print(s.get_grid_subset('0', mode='s'))
+    print(s.get_grid_subset("0", mode="s"))
