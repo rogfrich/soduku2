@@ -247,8 +247,49 @@ def test_remove_possibles_from_grid():
     assert s.grid["01"] == {"3"}
 
 
-def test_remove_possibles_from_grid_error():
+def test_naked_solve_row():
     s = Sudoku(test_data["valid_data"])
     s.clarify_all_cells()
-    with pytest.raises(exceptions.NumberNotInPossibleValuesError):
-        s.remove_possibles_from_grid("01", ["9"])
+
+    # safety check - "3" should always be in this cell when valid_data sudoku is first clarified. If not, something else
+    # has gone wrong and the test is invalid.
+    assert "3" in s.grid["01"]
+
+    s.naked_solve()
+    assert "3" not in s.grid["01"]
+
+
+def test_naked_solve_col():
+    s = Sudoku(test_data["valid_data"])
+    s.clarify_all_cells()
+
+    # safety check - "9" should always be in this cell when valid_data sudoku is first clarified. If not, something else
+    # has gone wrong and the test is invalid.
+    assert "9" in s.grid["18"]
+
+    matches = s.find_naked_multiples("8", 2, mode="c")
+    matched_possibles = matches[0][0]
+    matched_cells = matches[0][1]
+    for cell in s.get_grid_subset("8", mode="c"):
+        if cell not in matched_cells:
+            s.remove_possibles_from_grid(cell, matched_possibles)
+
+    assert 9 not in s.grid["18"]
+
+
+def test_naked_solve_square():
+    s = Sudoku(test_data["valid_data"])
+    s.clarify_all_cells()
+
+    # safety check - "9" should always be in this cell when valid_data sudoku is first clarified. If not, something else
+    # has gone wrong and the test is invalid.
+    assert "9" in s.grid["28"]
+
+    matches = s.find_naked_multiples("2", 2, mode="s")
+    matched_possibles = matches[0][0]
+    matched_cells = matches[0][1]
+    for cell in s.get_grid_subset("2", mode="s"):
+        if cell not in matched_cells:
+            s.remove_possibles_from_grid(cell, matched_possibles)
+
+    assert 9 not in s.grid["28"]
