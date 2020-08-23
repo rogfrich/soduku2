@@ -187,6 +187,17 @@ class Sudoku:
                 matches.append((k, v))
         return matches
 
+    def naked_solve(self):
+        for i in range(config.ROW_LENGTH):
+            for mode in ("r", "c", "s"):
+                matches = self.find_naked_multiples(f"{i}", 2, mode=mode)
+                if matches:
+                    matched_possibles = matches[0][0]
+                    matched_cells = matches[0][1]
+                    for cell in self.get_grid_subset(f"{i}", mode=mode):
+                        if cell not in matched_cells:
+                            self.remove_possibles_from_grid(cell, matched_possibles)
+
     def solve(self):
         while not self.solved:
             start = self.create_snapshot()
@@ -203,13 +214,13 @@ class Sudoku:
         :param possibles_to_remove: list
         :return: None
         """
+
         for possible in possibles_to_remove:
-            try:
+            if possible in self.grid[cell]:
                 self.grid[cell].remove(possible)
-            except KeyError:
-                raise NumberNotInPossibleValuesError
 
 
 if __name__ == "__main__":
+    # Use for exploratory testing.
     s = Sudoku(config.test_data["valid_data"])
-    print(s.get_grid_subset("0", mode="s"))
+    s.clarify_all_cells()

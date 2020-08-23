@@ -2,9 +2,8 @@
 
 ## About
 A basic sudoku solver. Currently uses the following logic:
-1. A cell is considered solved if there is exactly one possible value
-1. For each unsolved cell, work out what the possible values are (by looking at the solved cells around it), and update the cell
-1. Repeat until all the cells are solved.
+1. *Clarify:* For each unsolved cell, work out what the possible values are (by looking at the solved cells around it), and update the cell
+1. *Naked pairs:* Find cells which share two possible values. Since those values must be in those cells, remove the possible values from the other cells in the given house. (NB: Support for naked triples and quads is on the todo list).
 
 Future iterations will implement more advanced solving logic, but this works for the "easy" sudokus I've tested it with.
 
